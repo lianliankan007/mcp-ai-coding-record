@@ -164,6 +164,41 @@ POSIX shell:
 
 如果 Qdrant / Ollama 不在本机，只需要把 `.env` 里的地址指向局域网服务即可。
 
+## Linux 开机自启动
+
+如果你希望 Linux 重启后自动拉起这个 MCP 服务，项目内置了 `systemd` 安装脚本。
+
+### 1. 准备环境
+
+```bash
+cp .env.example .env
+chmod +x scripts/start.sh scripts/install_systemd_service.sh
+```
+
+把 `.env` 中的 `QDRANT_URL`、`OLLAMA_URL` 等配置改成实际可用地址。
+
+### 2. 安装为 systemd 服务
+
+```bash
+sudo SERVICE_USER="$USER" ./scripts/install_systemd_service.sh
+```
+
+默认会创建并启动 `memory-mcp-server.service`，且设置为开机自启。
+
+### 3. 常用运维命令
+
+```bash
+systemctl status memory-mcp-server
+sudo systemctl restart memory-mcp-server
+journalctl -u memory-mcp-server -f
+```
+
+如需自定义服务名或 `.env` 路径，可在安装时覆盖变量：
+
+```bash
+sudo SERVICE_NAME=memory-mcp ENV_FILE=/opt/memory-mcp/.env SERVICE_USER=codex ./scripts/install_systemd_service.sh
+```
+
 ## 效率检测
 
 为了不影响 AI coding 默认效率，效率检测分成两种模式：

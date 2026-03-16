@@ -1,0 +1,16 @@
+[Unit]
+Description=Memory MCP Server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=__SERVICE_USER__
+WorkingDirectory=__ROOT_DIR__
+EnvironmentFile=__ENV_FILE__
+ExecStart=__START_SCRIPT__
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
